@@ -1,6 +1,12 @@
 {
     "cmd": {
+        "args": "resolve",
         "values": "ssh_cmd"
     },
-    "examples": {}
+    "examples": {},
+    "resolve": {
+        "info": "Resolve the network if dns ip is provided",
+        "nested": true,
+        "values": "DNS_IP"
+    }
 }
