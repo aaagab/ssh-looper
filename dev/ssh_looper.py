@@ -1,0 +1,54 @@
+#!/usr/bin/env python3
+from pprint import pprint
+import os
+import re
+import sys
+import time
+import platform
+
+from ..gpkgs import message as msg
+
+def short_ping(network):
+        count_arg=""
+        null_arg=""
+        if platform.system() == "Windows":
+            count_arg="-n"
+            null_arg="> nul 2>&1"
+        elif platform.system() == "Linux":
+            count_arg="-c"
+            null_arg="> /dev/null 2>&1"
+
+        cmd="ping {} 4 {} {}".format(count_arg, network, null_arg)
+        print(cmd)
+        if os.system(cmd) == 0:
+            return True
+        else:
+            return False
+
+def ssh_looper(cmd):
+    # ssh -N -L {port}:localhost:{port} {user}@{ip_name}
+    # ssh {user}@ip_name -N -R {port}:localhost:{port}
+    cmd=cmd.strip()
+    reg=re.match(r"^ssh\s+-N\s+-L\s+[0-9]+:localhost:[0-9]+\s+.+?@(?P<network>[^ ]+)$", cmd)
+    if not reg:
+        reg=re.match(r"^ssh\s+.+?@(?P<network>[^ ]+)\s+-N\s+-R\s+[0-9]+:localhost:[0-9]+$", cmd)
+        if not reg:
+            msg.error("ssh cmd is not supported see readme '{}'".format(cmd), exit=1)
+
+    try:
+        while True:
+            if short_ping(reg.group("network")) is True:
+                try:
+                    print(cmd)
+                    os.system(cmd)
+                    time.sleep(5)
+                except KeyboardInterrupt:
+                    break
+                except BaseException as e:
+                    print(e)
+                    continue
+            else:
+                time.sleep(10)
+    except KeyboardInterrupt:
+        pass
+
