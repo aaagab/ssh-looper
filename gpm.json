@@ -1,0 +1,15 @@
+{
+    "authors": [
+        "Gabriel Auger"
+    ],
+    "deps": [],
+    "description": "reconnect ssh indefinitely",
+    "filen_main": "main.py",
+    "installer": "gpm",
+    "licenses": [
+        "MIT"
+    ],
+    "name": "ssh-looper",
+    "uuid4": "845c830a-4c33-4373-b729-95346f706e44",
+    "version": "0.0.0"
+}
