@@ -18,9 +18,11 @@ if __name__ == "__main__":
         """
             # supported commands are:
             ssh -N -L 2222:localhost:2222 user@domain.com
+            ssh -N -L 2222:localhost:2222 user@domain.com --resolve 123.123.123.123
             ssh user@192.168.56.1 -N -R 2222:localhost:22
         """).strip())
     elif args.cmd.here:
         pkg.ssh_looper(
-            cmd=args.cmd.value
+            cmd=args.cmd.value,
+            dns=args.resolve.value
         )
