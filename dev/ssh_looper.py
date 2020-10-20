@@ -49,13 +49,17 @@ def ssh_looper(cmd, dns=None):
     # ssh -N -L {port}:localhost:{port} {user}@{ip_name}
     # ssh {user}@ip_name -N -R {port}:localhost:{port}
     cmd=cmd.strip()
-    reg=re.match(r"^ssh\s+-N\s+-L\s+[0-9]+:localhost:[0-9]+\s+.+?@(?P<network>[^ ]+)$", cmd)
+    reg=re.match(r"^(?P<cmd_start>ssh\s+-N\s+-L\s+[0-9]+:localhost:[0-9]+\s+.+?@)(?P<network>[^ ]+)$", cmd)
     if not reg:
-        reg=re.match(r"^ssh\s+.+?@(?P<network>[^ ]+)\s+-N\s+-R\s+[0-9]+:localhost:[0-9]+$", cmd)
+        reg=re.match(r"^(?P<cmd_start>ssh\s+.+?@)(?P<network>[^ ]+)(?P<cmd_end>\s+-N\s+-R\s+[0-9]+:localhost:[0-9]+)$", cmd)
         if not reg:
             msg.error("ssh cmd is not supported see readme '{}'".format(cmd), exit=1)
 
     network=reg.group("network")
+    cmd_start=reg.group("cmd_start")
+    cmd_end=""
+    if "cmd_end" in reg.groupdict():
+        cmd_end=reg.group("cmd_end")
 
     try:
         while True:
@@ -69,8 +73,9 @@ def ssh_looper(cmd, dns=None):
                     network_to_ping=resolved_network
             if short_ping(network_to_ping) is True:
                 try:
-                    print(cmd)
-                    os.system(cmd)
+                    tmp_cmd=cmd_start+network_to_ping+cmd_end
+                    print(tmp_cmd)
+                    os.system(tmp_cmd)
                     time.sleep(5)
                 except KeyboardInterrupt:
                     break
