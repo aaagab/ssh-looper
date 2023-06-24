@@ -24,5 +24,8 @@ if __name__ == "__main__":
     elif args.cmd.here:
         pkg.ssh_looper(
             cmd=args.cmd.value,
-            dns=args.resolve.value
+            dns=args.resolve.value,
+            unknown_host=args.unknown.here,
         )
+    elif args.clear.here:
+        pkg.ssh_looper_clear()

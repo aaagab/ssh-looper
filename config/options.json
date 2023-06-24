@@ -1,6 +1,9 @@
 {
+    "clear": {
+        "info": "Clear previous ssh-looper connections"
+    }, 
     "cmd": {
-        "args": "resolve",
+        "args": "resolve,unknown",
         "values": "ssh_cmd"
     },
     "examples": {},
@@ -8,5 +11,9 @@
         "info": "Resolve the network if dns ip is provided",
         "nested": true,
         "values": "DNS_IP"
+    },
+    "unknown": {
+        "info": "Unknown host When selected following options are added -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null",
+        "nested": true
     }
 }
