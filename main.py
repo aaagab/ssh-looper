@@ -11,23 +11,36 @@ if __name__ == "__main__":
     pkg = importlib.import_module(module_name)
     del sys.path[0]
 
-    args, dy_app=pkg.Options(filenpa_app="gpm.json", filenpa_args="config/options.json").get_argsns_dy_app()
+    # args, dy_app=pkg.Options(filenpa_app="gpm.json", filenpa_args="config/options.json").get_argsns_dy_app()
 
-    if args.examples.here is True:
-        print(re.sub(r"\n\s+", "\n",
-        """
-            # supported commands are:
-            ssh -N -L 2222:localhost:2222 user@domain.com
-            ssh -N -L 2222:localhost:2222 user@domain.com --resolve 123.123.123.123
-            ssh user@192.168.56.1 -N -R 2222:localhost:22
-        """).strip())
-    elif args.cmd.here:
+    def seed(pkg_major, direpas_configuration=dict(), fun_auto_migrate=None):
+        fun_auto_migrate()
+    etconf=pkg.Etconf(enable_dev_conf=False, tree=dict(), seed=seed)
+
+    nargs=pkg.Nargs(
+        metadata=dict(executable="scriptjob"), 
+        options_file="config/options.yaml",
+        path_etc=etconf.direpa_configuration,
+        raise_exc=True,
+    )
+    args=nargs.get_args()
+
+    # if args.examples._here is True:
+    #     print(re.sub(r"\n\s+", "\n",
+    #     """
+    #         # supported commands are:
+    #         ssh -N -L 2222:localhost:2222 user@domain.com
+    #         ssh -N -L 2222:localhost:2222 user@domain.com --resolve 123.123.123.123
+    #         ssh user@192.168.56.1 -N -R 2222:localhost:22
+    #     """).strip())
+    # el
+    if args.cmd._here:
         pkg.ssh_looper(
-            cmd=args.cmd.value,
-            dns=args.resolve.value,
-            unknown_host=args.unknown.here,
+            cmd=args.cmd._value,
+            dns=args.cmd.resolve._value,
+            unknown_host=args.cmd.unknown._here,
         )
-    elif args.list.here:
+    elif args.list._here:
         pkg.ssh_looper_clear(to_list=True)
-    elif args.clear.here:
+    elif args.clear._here:
         pkg.ssh_looper_clear()
