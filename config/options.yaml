@@ -1,0 +1,17 @@
+args:
+  _examples: |
+    # supported commands are:
+    ssh -N -L 2222:localhost:2222 user@domain.com
+    ssh -N -L 2222:localhost:2222 user@domain.com --resolve 123.123.123.123
+    ssh user@192.168.56.1 -N -R 2222:localhost:22
+  clear: 
+    _info: "Clear previous ssh-looper connections"
+  cmd:
+    _label: "SSH_CMD"
+    resolve:
+      _info: "Resolve the network if dns ip is provided"
+      _label: "DNS_IP"
+    unknown:
+      _info: "Unknown host When selected following options are added -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+  list:
+    _info: "list all active ssh loop commands"
