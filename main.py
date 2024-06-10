@@ -27,5 +27,7 @@ if __name__ == "__main__":
             dns=args.resolve.value,
             unknown_host=args.unknown.here,
         )
+    elif args.list.here:
+        pkg.ssh_looper_clear(to_list=True)
     elif args.clear.here:
         pkg.ssh_looper_clear()

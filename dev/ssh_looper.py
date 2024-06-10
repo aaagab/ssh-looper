@@ -52,8 +52,7 @@ def resolve(hostname, dns):
 
     return computer_ip
 
-def ssh_looper_clear():
-    # lines=shell.cmd_get_value("ps auxfww").splitlines()
+def ssh_looper_clear(to_list=False):
     python_cmds=[]
     ssh_cmds=[]
 
@@ -61,27 +60,18 @@ def ssh_looper_clear():
         if proc.name() in ["python", "python.exe", "python3", "python3.exe", "ssh", "ssh.exe"]:
             cmdline=shlex.join(proc.cmdline())
             if "ssh -N -L" in cmdline or "ssh -N -R" in cmdline:
-                # elems=line.split()
-                # cmd=" ".join(elems[10:])
                 if "python" in cmdline:
                     python_cmds.append([proc.pid, cmdline])
                 else:
                     ssh_cmds.append([proc.pid, cmdline])    
-
-    # for line in lines:
-    #     if "ssh -N -L" in line or "ssh -N -R" in line:
-    #         elems=line.split()
-    #         pid=int(elems[1])
-    #         cmd=" ".join(elems[10:])
-    #         if "python" in cmd:
-    #             python_cmds.append([pid, cmd])
-    #         else:
-    #             ssh_cmds.append([pid, cmd])
-
+        
     for cmds in [python_cmds, ssh_cmds]:
         for pid, cmd in cmds:
-            os.kill(pid, signal.SIGTERM)
-            msg.success("ssh-looper: cleared: '{}'".format(cmd))
+            if to_list is True:
+                print(f"{pid} {cmd}")
+            else:
+                os.kill(pid, signal.SIGTERM)
+                msg.success("ssh-looper: cleared: '{}'".format(cmd))
 
 def ssh_looper(cmd, dns=None, unknown_host=False):
     # ssh -N -L {port}:localhost:{port} {user}@{ip_name}
