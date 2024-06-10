@@ -3,8 +3,9 @@
         "Gabriel Auger"
     ],
     "deps": [
+        "fe9fbe81-806f-4e85-8042-aaa33ce02d6a|etconf|3.1.0|gpm",
         "cf09346e-b436-4259-b6dd-e56516b508a5|message|7.1.1|gpm",
-        "ca72f0a9-8a9b-4ff6-a013-e5d0974cb1e5|options|8.5.0|gpm",
+        "89d8676a-6b02-43fa-8694-e97de5680cd0|nargs|5.1.1|gpm",
         "df328dbe-54ab-4a6d-b7a2-932b0eaee30a|shell_helpers|5.4.0|gpm"
     ],
     "description": "reconnect ssh indefinitely",
@@ -14,7 +15,7 @@
         "MIT"
     ],
     "name": "ssh-looper",
-    "timestamp": 1718039001.4542177,
+    "timestamp": 1718040283.257437,
     "uuid4": "845c830a-4c33-4373-b729-95346f706e44",
-    "version": "1.4.0"
+    "version": "1.5.0"
 }
