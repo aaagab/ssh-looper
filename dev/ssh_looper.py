@@ -11,6 +11,7 @@ import sys
 import tempfile
 import time
 import platform
+import psutil
 
 from ..gpkgs import message as msg
 from ..gpkgs import shell_helpers as shell
@@ -52,18 +53,30 @@ def resolve(hostname, dns):
     return computer_ip
 
 def ssh_looper_clear():
-    lines=shell.cmd_get_value("ps auxfww").splitlines()
+    # lines=shell.cmd_get_value("ps auxfww").splitlines()
     python_cmds=[]
     ssh_cmds=[]
-    for line in lines:
-        if "ssh -N -L" in line or "ssh -N -R" in line:
-            elems=line.split()
-            pid=int(elems[1])
-            cmd=" ".join(elems[10:])
-            if "python" in cmd:
-                python_cmds.append([pid, cmd])
-            else:
-                ssh_cmds.append([pid, cmd])
+
+    for proc in psutil.process_iter():
+        if proc.name() in ["python", "python.exe", "python3", "python3.exe", "ssh", "ssh.exe"]:
+            cmdline=shlex.join(proc.cmdline())
+            if "ssh -N -L" in cmdline or "ssh -N -R" in cmdline:
+                # elems=line.split()
+                # cmd=" ".join(elems[10:])
+                if "python" in cmdline:
+                    python_cmds.append([proc.pid, cmdline])
+                else:
+                    ssh_cmds.append([proc.pid, cmdline])    
+
+    # for line in lines:
+    #     if "ssh -N -L" in line or "ssh -N -R" in line:
+    #         elems=line.split()
+    #         pid=int(elems[1])
+    #         cmd=" ".join(elems[10:])
+    #         if "python" in cmd:
+    #             python_cmds.append([pid, cmd])
+    #         else:
+    #             ssh_cmds.append([pid, cmd])
 
     for cmds in [python_cmds, ssh_cmds]:
         for pid, cmd in cmds:
@@ -95,16 +108,12 @@ def ssh_looper(cmd, dns=None, unknown_host=False):
     else:
         localport=int(reg.group("rightport"))
         remoteport=int(reg.group("leftport"))
-        output=shell.cmd_get_value("ps -ef")
-        count=1
-        for line in output.splitlines():
-            if count > 1:
-                elems=line.split()
-                pid=int(elems[1])
-                if ("{}:localhost:{}".format(remoteport, localport) in line and pid != pid_script):
+        for proc in psutil.process_iter():
+            if proc.name() in ["ssh", "ssh.exe"]:
+                line=shlex.join(proc.cmdline())
+                if ("{}:localhost:{}".format(remoteport, localport) in line and proc.pid != pid_script):
                     msg.error("ssh-looper: port '{}' is already is already forwarded for command '{}'.".format(localport, cmd))
                     sys.exit(1)
-            count+=1
 
     network=reg.group("network")
     cmd_start=reg.group("cmd_start")
