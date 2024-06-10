@@ -2,7 +2,7 @@
 # authors: Gabriel Auger
 # name: ssh-looper
 # licenses: MIT 
-__version__= "1.3.0"
+__version__= "1.4.0"
 
 from .dev.ssh_looper import ssh_looper, ssh_looper_clear
 from .gpkgs import message as msg

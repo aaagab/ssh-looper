@@ -1,12 +1,15 @@
 {
     "clear": {
         "info": "Clear previous ssh-looper connections"
-    }, 
+    },
     "cmd": {
         "args": "resolve,unknown",
         "values": "ssh_cmd"
     },
     "examples": {},
+    "list": {
+        "info": "list all active ssh loop commands"
+    },
     "resolve": {
         "info": "Resolve the network if dns ip is provided",
         "nested": true,
