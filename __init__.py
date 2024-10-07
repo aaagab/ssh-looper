@@ -2,7 +2,7 @@
 # authors: Gabriel Auger
 # name: ssh-looper
 # licenses: MIT 
-__version__= "1.5.0"
+__version__= "1.5.1"
 
 from .gpkgs.nargs import Nargs, EndUserError
 from .gpkgs.etconf import Etconf
