@@ -18,7 +18,7 @@ if __name__ == "__main__":
     etconf=pkg.Etconf(enable_dev_conf=False, tree=dict(), seed=seed)
 
     nargs=pkg.Nargs(
-        metadata=dict(executable="scriptjob"), 
+        metadata=dict(executable="ssh-looper"), 
         options_file="config/options.yaml",
         path_etc=etconf.direpa_configuration,
         raise_exc=True,
