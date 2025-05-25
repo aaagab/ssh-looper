@@ -1,12 +1,18 @@
 # ssh-looper
 
-> follow syntax
+This software reconnect ssh indefinitely.  
+
+- help: `main.py -h`
+- examples: `main.py -he`
+- full usage: `main.py -uid=-1`
+
+## Accepted ssh cmd syntax
 ```bash
 ssh -N -L {port}:localhost:{port} {user}@{ip_name}
 ssh {user}@{ip_name} -N -R {port}:localhost:{port}
 ```
 
-> to test
+## check ssh connection
 ```bash
 netstat -tunlp
 # kill connection like that
